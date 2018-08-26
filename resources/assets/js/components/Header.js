@@ -6,7 +6,7 @@ import ListKorzin from "./ListKorzin";
 export default class Header extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {search:'',array:[],data:[],korzin:this.props.non, drop:false };
+        this.state = {search:'',array:[],data:[],korzin:this.props.non, drop:false, scroll:0 };
         this.list= this.list.bind(this)
         this.drop = this.drop.bind(this)
         this.funcarr = this.funcarr.bind(this)
@@ -62,6 +62,18 @@ export default class Header extends React.Component{
     }
 
     componentDidMount(){
+      const he = window.innerHeight;
+      this.setState({
+        scroll:he
+      });
+      window.onresize = ()=> {
+        let scrolled =  window.innerHeight;
+          this.setState({
+            scroll:scrolled
+          });
+      }
+
+
         axios.post('/home')
             .then((response)=> {
                 this.setState({
@@ -153,7 +165,7 @@ export default class Header extends React.Component{
                                                         <br/>
                                                          Товаров: {this.props.valtovar} <img src="/img/strelka.png" alt=""/>
                                                     </p>
-                                                    <div className={(this.state.drop === true)?"dropdown-menu show headspisol":"drophide"} >
+                                                    <div  className={(this.state.drop === true)?"dropdown-menu show headspisol":"drophide"} >
                                                         {(this.state.drop === true)?this.listtovars():<h3>Корзина пуста</h3>}
                                                         <div className="">
                                                             <div className="col-12 fulltexthead">
@@ -195,4 +207,3 @@ export default class Header extends React.Component{
         )
     }
 }
-

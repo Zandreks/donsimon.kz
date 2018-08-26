@@ -311,7 +311,7 @@ a:hover{
  .img-priduct img{
      height: 300px;
  }
- 
+
 .img-pr{
     width: 206px;
 }
@@ -336,7 +336,7 @@ a:hover{
     text-align: center;
 
 }
-.row-flex, .row-flex > div[class*='col-'] { 
+.row-flex, .row-flex > div[class*='col-'] {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -344,15 +344,15 @@ a:hover{
     display: flex;
     flex:1 1 auto;
    }
-   
+
    .row-flex-wrap {
        -webkit-flex-flow: row wrap;
     align-content: flex-start;
     flex:0;
    }
-   
+
    .row-flex > div[class*='col-'] {
-        margin:-.2px; 
+        margin:-.2px;
    }
 
   .bordernone{

@@ -5,7 +5,7 @@ import axios from "axios";
 export default class TovarShpw extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {data:{},val:1, option:'ed', sena:0, img:[], knopka:false};
+        this.state = {data:{},val:1, option:'ed', sena:0, img:[], knopka:true};
         this.onClickKarzin = this.onClickKarzin.bind(this);
         this.onclickPlus = this.onclickPlus.bind(this)
         this.onclickMinus = this.onclickMinus.bind(this)
@@ -16,16 +16,31 @@ export default class TovarShpw extends React.Component{
 
     onClickKarzin(e) {
         e.preventDefault()
-        let obj = {
-            id:Number(this.state.data.id),
-            value:Number(this.state.val),
-            option:this.state.option
-        };
+        if (this.state.knopka === false) {
+          let obj = {
+              id:Number(this.state.data.id),
+              value:Number(this.state.val)+1,
+              option:this.state.option
+          };
 
-        this.props.obj(obj)
-        this.setState({
-            knopka: true
-        })
+          this.props.obj(obj)
+          this.setState({
+              knopka: false,
+              val:this.state.val+1
+          })
+        }else{
+          let obj = {
+              id:Number(this.state.data.id),
+              value:Number(this.state.val),
+              option:this.state.option
+          };
+
+          this.props.obj(obj)
+          this.setState({
+              knopka: false
+          })
+        }
+
         let goodSena = this.state.sena * this.state.val;
         setTimeout(()=>this.props.fullsena(),20)
 
@@ -37,14 +52,16 @@ export default class TovarShpw extends React.Component{
             value = 1;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
+                val: value,
+                knopka: true
             });
 
         }else{
             value++;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
+                val: value,
+                knopka: true
             });
 
 
@@ -60,7 +77,8 @@ export default class TovarShpw extends React.Component{
             value = 1;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
+                val: value,
+                knopka: true
             })
 
 
@@ -68,7 +86,8 @@ export default class TovarShpw extends React.Component{
             value--;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
+                val: value,
+                knopka: true
             })
 
         }

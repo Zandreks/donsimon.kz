@@ -237,7 +237,7 @@ export default class Karzina extends React.Component{
                         <div className="form-row  promo">
 
                             <div className="col-md-6 mb-3">
-                                <input  className={`form-control ${this.state.isvalidptomo}`} onChange={this.promo} id="promo"
+                                <input  className={`form-control text-center ${this.state.isvalidptomo}`} onChange={this.promo} id="promo"
                                         placeholder="Промокод" value={this.state.promo}/>
 
                                 <div className={this.state.claspromo}>

@@ -8,7 +8,7 @@ export default class Page extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = {data:{},option:'ed',img:[],array: [],val:1, sena:0, senarr:[],Sena:0,valtovar:0,knopka:false};
+        this.state = {data:{},option:'ed',img:[],array: [],val:1, sena:0, senarr:[],Sena:0,valtovar:0,knopka:true};
         this.ongangeoption = this.ongangeoption.bind(this)
         this.list = this.list.bind(this)
         this.funcarr = this.funcarr.bind(this)
@@ -28,7 +28,7 @@ export default class Page extends React.Component{
 
         if (this.state.array.length>0) {
             let newarr =  this.state.array.filter(function (item) {
-                return (item.id !== obj.id);
+                return (item.id !== obj.id );
             });
             this.setState({
                 array: [...newarr,obj]
@@ -58,16 +58,30 @@ export default class Page extends React.Component{
 
     onClickKarzin(e) {
         e.preventDefault()
-        let obj = {
-            id:Number(this.state.data.id),
-            value:Number(this.state.val),
-            option:this.state.option
-        };
+        if (this.state.knopka === false) {
+          let obj = {
+              id:Number(this.state.data.id),
+              value:Number(this.state.val)+1,
+              option:this.state.option
+          };
 
-        this.funcarr(obj)
-        this.setState({
-            knopka: true
-        })
+          this.funcarr(obj)
+          this.setState({
+              knopka: false,
+              val:this.state.val+1
+          })
+        }else{
+          let obj = {
+              id:Number(this.state.data.id),
+              value:Number(this.state.val),
+              option:this.state.option
+          };
+
+          this.funcarr(obj)
+          this.setState({
+              knopka: false
+          })
+        }
         let goodSena = this.state.sena * this.state.val;
         setTimeout(()=>this.masivsena(),20)
 
@@ -144,14 +158,16 @@ export default class Page extends React.Component{
             value = 1;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
+                val: value,
+                knopka: true
             });
 
         }else{
             value++;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
+                val: value,
+                knopka: true
             });
 
 
@@ -167,8 +183,9 @@ export default class Page extends React.Component{
             value = 1;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
-            })
+                val: value,
+                knopka: true
+            });
             setTimeout(()=>this.masivsena(),20)
 
 
@@ -176,8 +193,9 @@ export default class Page extends React.Component{
             value--;
             let goodSena = this.state.sena * value ;
             this.setState({
-                val: value
-            })
+                val: value,
+                knopka: true
+            });
             setTimeout(()=>this.masivsena(),20)
 
         }
@@ -414,7 +432,7 @@ export default class Page extends React.Component{
                                             Купить упаковку {this.state.data.sena2} тг <span className="ekonom">(экономия  {this.state.data.sena - this.state.data.sena2} тг )</span>
                                         </label>
                                     </div>
-                                    <p>В упаковке {this.state.data.kolichestvo} штук</p>
+                                    <p className="pt-2">В упаковке {this.state.data.kolichestvo} штук</p>
 
                                     <h4>{(this.state.option==='ed')?this.state.data.sena * this.state.val : this.state.data.sena2 *this.state.data.kolichestvo * this.state.val} тг</h4>
                                     <div className="row mt-3">

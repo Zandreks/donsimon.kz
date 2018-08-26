@@ -158,7 +158,11 @@ export default class ListKorzin extends React.Component{
                     </div>
 
                 </td >
-                <td className="pt-3" data-label="Цана за еденицу">{(this.props.number.option === "ed")? this.state.data.sena*this.state.val+" тг за еденицу":this.state.data.sena2* this.state.data.kolichestvo *this.state.val +" тг за упаковку"} </td>
+                <td className="pt-3" data-label="Цана за еденицу">{(this.props.number.option === "ed")?<p> {this.state.data.sena*this.state.val} тг
+                <br/>  Цена за еденицу  {this.state.data.sena} тг. </p>
+                  :<p> {this.state.data.sena2* this.state.data.kolichestvo *this.state.val}  тг за упаковку <br/>
+                  Цена за упаковку {this.state.data.sena2 * this.state.data.kolichestvo} тг. В упаковке {this.state.data.kolichestvo} штук </p>}
+              </td>
                 <td data-label="Удалить товар">
                     <button type="button" onClick={()=> this.deletenumber(number.id) } className="btn btn-outline-danger">Удалить</button>
                 </td>
