@@ -715,6 +715,9 @@ hr {
     background: #094887;
     color: #ffffff;
 }
+.btnblokrarz a:link{
+  color: #ffffff;
+}
 .btnofrm:hover{
     color: #1e3c77;
 }
@@ -723,5 +726,6 @@ hr {
 }
 .optiondost{
   margin-left: 50px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }

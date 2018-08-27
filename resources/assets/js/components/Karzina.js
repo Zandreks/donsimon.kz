@@ -16,7 +16,9 @@ export default class Karzina extends React.Component{
             skid:0,
             nam:0,
             fulsena:0,
-            dostavra:''
+            dostavra:'',
+            promotrue:false,
+            senadostrue:false
         } ;
         this.deletenumber = this.deletenumber.bind(this)
         this.Table=this.Table.bind(this)
@@ -27,6 +29,7 @@ export default class Karzina extends React.Component{
         this.promo = this.promo.bind(this)
         this.promosend = this.promosend.bind(this)
         this.optiondos = this.optiondos.bind(this)
+        this.senados = this.senados.bind(this)
     }
 
     funcarr(obj){
@@ -64,8 +67,13 @@ export default class Karzina extends React.Component{
         this.setState({
             senarr: filtersena
         });
+        this.setState({
+          senadostrue:false
+        });
         setTimeout(this.func, 10);
         setTimeout( this.suma,50)
+        setTimeout(()=>this.senados(),100)
+
 
     }
 
@@ -106,6 +114,9 @@ export default class Karzina extends React.Component{
                 senarr: [...this.state.senarr,obj]
             })
         }
+        this.setState({
+          senadostrue:false
+        });
         setTimeout(()=>this.suma())
     }
     suma(){
@@ -118,9 +129,49 @@ export default class Karzina extends React.Component{
             })
 
         }
+
         this.setState({
             Sena: obshasuma
         })
+        this.senados();
+
+    }
+    sena2(){
+      let obshasuma =0;
+      let num =0
+      for (let i = 0; i< this.state.senarr.length; i++){
+          obshasuma+= this.state.senarr[i].sena
+          this.setState({
+              nam:num+=1
+          })
+
+      }
+
+      this.setState({
+          Sena: obshasuma
+      })
+    }
+    senados(){
+      if (this.state.dostavra === 'Доставка по городу Астана' && this.state.Sena <=10000 && this.state.senadostrue ===false)  {
+         setTimeout(()=>{
+          this.setState({
+            Sena: this.state.Sena+1000,
+            senadostrue:true
+          });
+        },20)
+
+      }if (this.state.dostavra === 'Доставка в другие регионы') {
+
+        setTimeout(()=> {
+          this.sena2()
+          setTimeout(()=>{
+            this.setState({
+              senadostrue:false
+            });
+          },50)
+
+        })
+      }
 
 
     }
@@ -128,29 +179,88 @@ export default class Karzina extends React.Component{
 
         if (this.state.array.length>0){
             return(
+              <div>
 
-                <div className="table-responsive">
-                    <table className="table  ">
-                        <tbody>
-                        { this.state.array.sort(function (a, b) {
-                            if (a.id > b.id) {
-                                return 1;
-                            }
-                            if (a.id < b.id) {
-                                return -1;
-                            }
-                            // a должно быть равным b
-                            return 0;
-                        }).map((number) =>
-                            <ListKorzin key={ number.id} number={number} senamasiv={this.senamasiv}  del={this.deletenumber}/>
-                        )}
-                        </tbody>
-                    </table>
-                    <div className="col-md-12 mb-3">
-                        <h4 className="text-center">Итого: {this.state.Sena} тг</h4>
+                  <div className="table-responsive pt-5">
+                      <table className="table  ">
+                          <tbody>
+                          { this.state.array.sort(function (a, b) {
+                              if (a.id > b.id) {
+                                  return 1;
+                              }
+                              if (a.id < b.id) {
+                                  return -1;
+                              }
+                              // a должно быть равным b
+                              return 0;
+                          }).map((number) =>
+                              <ListKorzin key={ number.id} number={number} senamasiv={this.senamasiv}  del={this.deletenumber}/>
+                          )}
+                          </tbody>
+                      </table>
 
-                    </div>
+                  </div>
+                <div className="form-row  promo">
+
+                                      <div className="col-md-6 mb-3">
+                                          <input  className={`form-control text-center ${this.state.isvalidptomo}`} onChange={this.promo} id="promo"
+                                                  placeholder="Промокод" value={this.state.promo}/>
+
+                                          <div className={this.state.claspromo}>
+                                              {this.state.erorrpomi}
+                                          </div>
+
+                                      </div>
+
+                                      <div className="col-md-6 mb-3">
+                                          <button type="button" id='checkout' onClick={this.promosend} className="btn btn-outline-success btn-block">Проверить</button>
+
+                                      </div>
+
+                                      <div>
+
                 </div>
+
+
+
+                                  </div>
+
+                                        <div className="optiondost">
+                                          <div className="form-check">
+                                            <input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="exampleRadios"
+                                  id="exampleRadios1"
+                                  onChange={this.optiondos}
+                                  defaultValue="Доставка по городу Астана" />
+                                            <label
+                                  className="form-check-label"
+                                  htmlFor="exampleRadios1">
+                                              Доставка по городу Астана осуществляется бесплатно при заказе на сумму свыше 10 000 тг
+                                            </label>
+                                          </div>
+                                          <div className="form-check">
+                                            <input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="exampleRadios"
+                                  id="exampleRadios2"
+                                  onChange={this.optiondos}
+                                  defaultValue="Доставка в другие регионы" />
+                                            <label
+                                  className="form-check-label"
+                                  htmlFor="exampleRadios2">
+                                              Доставка в другие регионы осуществляется по договоренности (За дополнительной информацией просим обращаться по тел.: <a href="tel:+77710850808">+7 (771) 085-08-08</a>
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div className="col-md-12 mb-3">
+                                            <h4 className="text-center">Итого: {this.state.Sena} тг</h4>
+
+                                        </div>
+
+              </div>
             )
         }else {
             return(
@@ -205,11 +315,17 @@ export default class Karzina extends React.Component{
                         erorrpomi:"Ваша скидка подсчитана"
 
                     })
-                    let skidka = Number(this.state.Sena)*this.state.skid/100
-                    const fullsena = Math.ceil(Number(this.state.Sena)-skidka)
-                    this.setState({
-                        Sena:fullsena
-                    })
+                    if (this.state.promotrue === false) {
+                      let skidka = Number(this.state.Sena)*this.state.skid/100
+                      const fullsena = Math.ceil(Number(this.state.Sena)-skidka)
+                      this.setState({
+                          Sena:fullsena,
+                          promotrue:true
+
+                      })
+                      this.senados()
+                    }
+
                 }else {
                     this.setState({
                         isvalidptomo:"is-invalid",
@@ -227,12 +343,14 @@ export default class Karzina extends React.Component{
             .then(function () {
                 // always executed
             });
+
     }
 
     optiondos(e){
       this.setState({
         dostavra:e.target.value
       });
+      setTimeout(()=> this.senados(),20)
     }
 
     render(){
@@ -243,69 +361,22 @@ export default class Karzina extends React.Component{
                 <div className="container content-fon over  pt-3">
 
                     <div className="tablekorzin">
-                        <div className="form-row  promo">
 
-                            <div className="col-md-6 mb-3">
-                                <input  className={`form-control text-center ${this.state.isvalidptomo}`} onChange={this.promo} id="promo"
-                                        placeholder="Промокод" value={this.state.promo}/>
-
-                                <div className={this.state.claspromo}>
-                                    {this.state.erorrpomi}
-                                </div>
-
-                            </div>
-
-                            <div className="col-md-6 mb-3">
-                                <button type="button" id='checkout' onClick={this.promosend} className="btn btn-outline-success btn-block">Проверить</button>
-
-                            </div>
-
-                            <div>
-
-      </div>
-
-
-
-                        </div>
-                        <div className="optiondost">
-                          <div className="form-check">
-                            <input
-                  className="form-check-input"
-                  type="radio"
-                  name="exampleRadios"
-                  id="exampleRadios1"
-                  onChange={this.optiondos}
-                  defaultValue="Доставка по городу Астана" />
-                            <label
-                  className="form-check-label"
-                  htmlFor="exampleRadios1">
-                              Доставка по городу Астана осуществляется бесплатно при заказе на сумму свыше 10 000 тг
-                            </label>
-                          </div>
-                          <div className="form-check">
-                            <input
-                  className="form-check-input"
-                  type="radio"
-                  name="exampleRadios"
-                  id="exampleRadios2"
-                  onChange={this.optiondos}
-                  defaultValue="Доставка в другие регионы" />
-                            <label
-                  className="form-check-label"
-                  htmlFor="exampleRadios2">
-                              Доставка в другие регионы осуществляется по договоренности (За дополнительной информацией просим обращаться по тел.: <a href="tel:+77710850808">+7 (771) 085-08-08</a>
-                            </label>
-                          </div>
-                        </div>
                         {this.Table()}
+
                     </div>
                     <div className="inputgrp text-center ">
                         <div className="btn-group btnblokrarz  " role="group" aria-label="Basic example">
-                            <NavLink to={{
-                                pathname:"/home/decor",
-                                state:{sena:this.state.Sena,dost:this.state.dostavra}
+                          {(this.state.Sena ===0 || this.state.nam!== this.state.valtovar || this.state.dostavra==="")?
 
-                            }} type="button" className={`btn btnofrm ${(this.state.Sena ===0 || this.state.nam!== this.state.valtovar || this.state.dostavra==="")?'disabled':''}`}>Оформить заказ</NavLink>
+                            <a href="#"type="button" className={`btn btnofrm disabled`}>Оформить заказ</a>:
+                              <NavLink to={{
+                                  pathname:"/home/decor",
+                                  state:{sena:this.state.Sena,dost:this.state.dostavra}
+
+                              }} type="button" className={`btn btnofrm`}>Оформить заказ</NavLink>
+                          }
+
                         </div>
                     </div>
 

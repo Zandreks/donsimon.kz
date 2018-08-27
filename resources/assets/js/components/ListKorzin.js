@@ -49,8 +49,7 @@ export default class ListKorzin extends React.Component{
             this.setState({
                 val: value
             })
-            setTimeout(()=>this.props.senamasiv(this.state.val, this.state.id, this.props.number.option, goodSena))
-
+            return false
         }else{
             value--;
             let goodSena = this.state.sena * value ;
