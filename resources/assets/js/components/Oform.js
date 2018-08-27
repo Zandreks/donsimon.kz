@@ -71,7 +71,7 @@ export default class Oform extends React.Component{
     }
 
     componentDidMount() {
-        if (localStorage.getItem("karzina") != null) {
+          if (localStorage.getItem("karzina") != null) {
             let returnObj = JSON.parse(localStorage.getItem("karzina"))
             this.setState({
                 array: this.state.array.concat(returnObj),
@@ -89,7 +89,7 @@ export default class Oform extends React.Component{
                 })
                     .then((response)=> {
 
-                        fulspisok = (this.state.array[i].option ==='ed')? response.data.title + " количество "+ this.state.array[i].value +" едениц по цене "+ response.data.sena+" тг": response.data.title + " количество "+  this.state.array[i].value +" упаковак по цене "+ response.data.sena2 *response.data.kolichestvo+" тг"
+                        fulspisok = (this.state.array[i].option ==='ed')? response.data.title + " количество "+ this.state.array[i].value +" единиц по цене "+ response.data.sena+" тг."+ " Выбранный вариант доставки "+this.props.location.state.dost: response.data.title + " количество "+  this.state.array[i].value +" упаковак по цене "+ response.data.sena2 *response.data.kolichestvo+" тг" + " Выбранный вариант доставки "+this.props.location.state.dost
                         this.setState({
                             spisoktovar:this.state.spisoktovar.concat(fulspisok)
                         })

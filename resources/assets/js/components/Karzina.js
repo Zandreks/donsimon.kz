@@ -15,7 +15,8 @@ export default class Karzina extends React.Component{
             claspromo:'',
             skid:0,
             nam:0,
-            fulsena:0
+            fulsena:0,
+            dostavra:''
         } ;
         this.deletenumber = this.deletenumber.bind(this)
         this.Table=this.Table.bind(this)
@@ -25,6 +26,7 @@ export default class Karzina extends React.Component{
         this.suma = this.suma.bind(this)
         this.promo = this.promo.bind(this)
         this.promosend = this.promosend.bind(this)
+        this.optiondos = this.optiondos.bind(this)
     }
 
     funcarr(obj){
@@ -226,6 +228,13 @@ export default class Karzina extends React.Component{
                 // always executed
             });
     }
+
+    optiondos(e){
+      this.setState({
+        dostavra:e.target.value
+      });
+    }
+
     render(){
         return(
             <section className="content">
@@ -251,18 +260,52 @@ export default class Karzina extends React.Component{
 
                             </div>
 
+                            <div>
+
+      </div>
+
+
 
                         </div>
-
+                        <div className="optiondost">
+                          <div className="form-check">
+                            <input
+                  className="form-check-input"
+                  type="radio"
+                  name="exampleRadios"
+                  id="exampleRadios1"
+                  onChange={this.optiondos}
+                  defaultValue="Доставка по городу Астана" />
+                            <label
+                  className="form-check-label"
+                  htmlFor="exampleRadios1">
+                              Доставка по городу Астана осуществляется бесплатно при заказе на сумму свыше 10 000 тг
+                            </label>
+                          </div>
+                          <div className="form-check">
+                            <input
+                  className="form-check-input"
+                  type="radio"
+                  name="exampleRadios"
+                  id="exampleRadios2"
+                  onChange={this.optiondos}
+                  defaultValue="Доставка в другие регионы" />
+                            <label
+                  className="form-check-label"
+                  htmlFor="exampleRadios2">
+                              Доставка в другие регионы осуществляется по договоренности (За дополнительной информацией просим обращаться по тел.: <a href="tel:+77710850808">+7 (771) 085-08-08</a>
+                            </label>
+                          </div>
+                        </div>
                         {this.Table()}
                     </div>
                     <div className="inputgrp text-center ">
                         <div className="btn-group btnblokrarz  " role="group" aria-label="Basic example">
                             <NavLink to={{
                                 pathname:"/home/decor",
-                                state:{sena:this.state.Sena}
+                                state:{sena:this.state.Sena,dost:this.state.dostavra}
 
-                            }} type="button" className={`btn btnofrm ${(this.state.Sena ===0 || this.state.nam!== this.state.valtovar)?'disabled':''}`}>Оформить заказ</NavLink>
+                            }} type="button" className={`btn btnofrm ${(this.state.Sena ===0 || this.state.nam!== this.state.valtovar || this.state.dostavra==="")?'disabled':''}`}>Оформить заказ</NavLink>
                         </div>
                     </div>
 

@@ -612,7 +612,7 @@ hr {
     width: 50%;
     margin: 0 auto;
     padding-top: 30px;
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
 .mtpage{
     margin-top: 80px;
@@ -712,12 +712,16 @@ hr {
 .btnofrm{
     text-align: center;
     width: 300px;
-    background: #28a745;
-    color: white;
+    background: #094887;
+    color: #ffffff;
 }
 .btnofrm:hover{
     color: #1e3c77;
 }
 .maginop{
     margin-bottom: 60px;
+}
+.optiondost{
+  margin-left: 50px;
+  margin-bottom: 20px;
 }
