@@ -12,9 +12,18 @@
     font-size: 18px;
     text-transform: uppercase;
 }
-body{
+html, body{
     background: white;
+
 }
+.wraper{
+
+}
+main {
+  min-height: calc(76vh - 80px);
+
+}
+
 .navbar{
     color: white;
     padding-top: 20px;
@@ -318,6 +327,7 @@ a:hover{
 
  footer{
      background: #a4b630;
+
      color: #ffffff;
  }
  footer h3{
