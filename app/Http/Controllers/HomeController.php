@@ -109,7 +109,7 @@ class HomeController extends Controller
         $PAYMENT_RULE=1;
         $PAYMENT_RETURNRES='http://don-simon.kz/payok';
         $PAYMENT_RETURN='http://don-simon.kz/paygood';
-        $PAYMENT_RETURNMET=1;
+        $PAYMENT_RETURNMET=2;
         $PAYMENT_RETURNFAIL="http://don-simon.kz/payfail";
         $PAYMENT_TESTMODE=0;
         $SECRETCODE ='KXVi5,_OFDgF52451';
@@ -117,7 +117,7 @@ class HomeController extends Controller
         $PAYMENT_HASH=md5("$MERCHANT_INFO:$PAYMENT_TYPE:$PAYMENT_RULE:$PAYMENT_AMOUNT:$PAYMENT_ADDVALUE:$PAYMENT_INFO:$PAYMENT_DELIVER:$PAYMENT_ORDER:$PAYMENT_VISA:$PAYMENT_TESTMODE:$PAYMENT_RETURNRES:$PAYMENT_RETURN:$PAYMENT_RETURNMET:$SECRETCODE");;
 
 
-        
+
         $params =
             "PAYMENT_AMOUNT=$PAYMENT_AMOUNT&PAYMENT_INFO=$PAYMENT_INFO&PAYMENT_DELIVER=$PAYMENT_DELIVER&PAYMENT_ADDVALUE=$PAYMENT_ADDVALUE&MERCHANT_INFO=$MERCHANT_INFO&PAYMENT_ORDER=$PAYMENT_ORDER&PAYMENT_TYPE=$PAYMENT_TYPE&PAYMENT_RULE=$PAYMENT_RULE&PAYMENT_RETURNRES=$PAYMENT_RETURNRES&PAYMENT_RETURN=$PAYMENT_RETURN&PAYMENT_RETURNMET=$PAYMENT_RETURNMET&PAYMENT_RETURNFAIL=$PAYMENT_RETURNFAIL&PAYMENT_TESTMODE=$PAYMENT_TESTMODE&PAYMENT_HASH=$PAYMENT_HASH";
         $httpurl =
@@ -177,8 +177,6 @@ class HomeController extends Controller
 
     }
     public function payok (){
-        session(['ok' => 'ok']);
-
         echo "OK";
     }
     public function paygood(Request $request){
@@ -222,8 +220,8 @@ class HomeController extends Controller
             ];
 
             Mail::send('mail',$data2,  function ($message) {
-                $message->to('zakaz@don-simon.kz', 'Новый заказ с сайта don-simon.kz')->subject('Новый заказ с сайта don-simon.kz');
-                $message->from('zakaz@don-simon.kz','Новый заказ с сайта don-simon.kz');
+                $message->to('zakaz@megabar.kz', 'Новый заказ с сайта don-simon.kz')->subject('Новый заказ с сайта don-simon.kz');
+                $message->from('zakaz@megabar.kz','Новый заказ с сайта don-simon.kz');
             });
             $item = new Promo([
                 "promo"=>$email,
@@ -272,4 +270,3 @@ class HomeController extends Controller
     }
 
 }
-

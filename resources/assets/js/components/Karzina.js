@@ -144,12 +144,20 @@ export default class Karzina extends React.Component{
           this.setState({
               nam:num+=1
           })
+      }
+      if (this.state.promotrue === true) {
+        let skidka = Number(obshasuma)*this.state.skid/100
+        const fullsena = Math.ceil(Number(obshasuma)-skidka)
+        this.setState({
+            Sena:fullsena
 
+        })
+      }else{
+        this.setState({
+            Sena: obshasuma
+        })
       }
 
-      this.setState({
-          Sena: obshasuma
-      })
     }
     senados(){
       if (this.state.dostavra === 'Доставка по городу Астана' && this.state.Sena <=10000 && this.state.senadostrue ===false)  {
@@ -161,7 +169,6 @@ export default class Karzina extends React.Component{
         },20)
 
       }if (this.state.dostavra === 'Доставка в другие регионы') {
-
         setTimeout(()=> {
           this.sena2()
           setTimeout(()=>{
