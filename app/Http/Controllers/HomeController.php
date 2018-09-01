@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Order;
 use App\Promo;
 use App\Skidka;
 use App\Tovars;
 use App\Zakaz;
+use App\Alltovars;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Null_;
@@ -94,6 +97,7 @@ class HomeController extends Controller
         $adres = $reg." регион. ".$ccity." г. ".$adr;
 
         $dopinva = $name." ".$lastname." ".$email." ".$phone;
+        $timeorder = session('timeorder');
 
 
         $dataadres=iconv('UTF-8','windows-1251', $adres);
@@ -104,7 +108,7 @@ class HomeController extends Controller
         $PAYMENT_DELIVER=$dataadres;
         $PAYMENT_ADDVALUE=$datadop;
         $MERCHANT_INFO=929;
-        $PAYMENT_ORDER=time();
+        $PAYMENT_ORDER=$timeorder;
         $PAYMENT_TYPE=33;
         $PAYMENT_RULE=1;
         $PAYMENT_RETURNRES='http://don-simon.kz/payok';
@@ -122,6 +126,18 @@ class HomeController extends Controller
             "PAYMENT_AMOUNT=$PAYMENT_AMOUNT&PAYMENT_INFO=$PAYMENT_INFO&PAYMENT_DELIVER=$PAYMENT_DELIVER&PAYMENT_ADDVALUE=$PAYMENT_ADDVALUE&MERCHANT_INFO=$MERCHANT_INFO&PAYMENT_ORDER=$PAYMENT_ORDER&PAYMENT_TYPE=$PAYMENT_TYPE&PAYMENT_RULE=$PAYMENT_RULE&PAYMENT_RETURNRES=$PAYMENT_RETURNRES&PAYMENT_RETURN=$PAYMENT_RETURN&PAYMENT_RETURNMET=$PAYMENT_RETURNMET&PAYMENT_RETURNFAIL=$PAYMENT_RETURNFAIL&PAYMENT_TESTMODE=$PAYMENT_TESTMODE&PAYMENT_HASH=$PAYMENT_HASH";
         $httpurl =
             "https://balance.prostoplateg.kz/sale.php";
+
+
+            /// сохранение заказов
+            $item = new Alltovars([
+                "name"=>$dopinva,
+                "adres"=> $adres,
+                "sena"=> $amout,
+                'tovars'=> $tovars,
+                "idzakas"=>$timeorder,
+                'email'=>$email
+            ]);
+            $item->save();
 
 // инициализация сеанса
         $ch = curl_init();
@@ -164,6 +180,7 @@ class HomeController extends Controller
         session(['adres' => $adres]);
         session(['sena' => $amount]);
         session(['tovars' => $tovars]);
+        session(['timeorder' => time()]);
 
         $adres = $reg." регион. ".$city." г. ".$adres;
 
@@ -176,15 +193,34 @@ class HomeController extends Controller
 
 
     }
-    public function payok (){
-        echo "OK";
-    }
-    public function paygood(Request $request){
-        if ($request->session()->has('sena')) {
-            $name = session('dopinva');
-            $adres = session('adresdata');
-            $sena = session('sena');
-            $tovars = session('tovars');
+    public function payok (Request $request){
+        $item = new Order([
+            'RETURN_UNIQ_ID'=>$request->get('RETURN_UNIQ_ID'),
+            'RETURN_MERCHANT'=>$request->get('RETURN_MERCHANT'),
+            'RETURN_ADDVALUE'=> $request->get('RETURN_ADDVALUE'),
+            'RETURN_CLIENTORDER'=> $request->get('RETURN_CLIENTORDER'),
+
+            'RETURN_AMOUNT'=> $request->get('RETURN_AMOUNT'),
+            'RETURN_RESULT'=> $request->get('RETURN_RESULT'),
+            'RETURN_COMISSION'=>$request->get('RETURN_COMISSION'),
+            'TEST_MODE'=>$request->get('TEST_MODE'),
+            'PAYMENT_DATE'=>$request->get('PAYMENT_DATE'),
+            'RETURN_PMEMAIL'=>$request->get('RETURN_PMEMAIL'),
+            'RETURN_TPHONE'=> $request->get('RETURN_TPHONE'),
+            'RETURN_COMMISSTYPE' => $request->get('RETURN_COMMISSTYPE'),
+            'RETURN_TYPE' => $request->get('RETURN_TYPE'),
+            'RETURN_HASH'=>$request->get('RETURN_HASH')
+
+        ]);
+        $item->save();
+        if ($request->get('RETURN_RESULT') ==20) {
+          $polya = Alltovars::where('idzakas',$request->get('RETURN_CLIENTORDER'))->first();
+          $idzakas = $polya->idzakas;
+          if ($idzakas == $request->get('RETURN_CLIENTORDER')) {
+            $name = $polya->name;
+            $adres = $polya->adres;
+            $sena = $polya->sena;
+            $tovars = $polya->tovars;
             $item = new Zakaz([
                 "name"=>$name,
                 "adres"=> $adres,
@@ -196,15 +232,18 @@ class HomeController extends Controller
             $id = $item->id;
 
 
-            $email = md5(session('email'));
+            $email = md5($polya->email);
 
             $data =[
                 "tomars"=>$tovars,
                 "promo"=>$email,
                 "id"=>$id,
             ];
+            $email2 = $polya->email;
+            session(['email2' => $email2]);
+
             Mail::send('zakazkli',$data,  function ($message) {
-                $email2 = session('email');
+              $email2 = session('email2');
 
                 $message->to($email2, 'Ваш заказ с сайта don-simon.kz')->subject('Ваш заказ с сайта don-simon.kz');
                $message->from('zakaz@don-simon.kz','Ваш заказ с сайта don-simon.kz');
@@ -229,14 +268,33 @@ class HomeController extends Controller
 
             ]);
             $item->save();
-            if ($request->session()->has('promo')) {
 
-                $promo = Promo::find(session('promo'));
-                $promo->delete();
-            }
-            $request->session()->flush();
+          }else {
+          echo "OK";
+          }
 
-            return view('end', ['promo' => $email]);
+        }
+
+        echo "OK";
+    }
+    public function paygood(Request $request){
+        if ($request->session()->has('timeorder')) {
+          $polya = Alltovars::where('idzakas',session('timeorder'))->first();
+          $idzakas = $polya->idzakas;
+          if (session('timeorder')==$idzakas) {
+             $order = Order::where('RETURN_CLIENTORDER',$idzakas)->first();
+             if (count($order)>0) {
+               $email = md5(session('email'));
+               $request->session()->flush();
+               return view('end', ['promo' => $email]);
+             }else {
+               return redirect('http://don-simon.kz/home');
+
+             }
+
+          }else {
+              return redirect('http://don-simon.kz/home');
+          }
 
         }else{
            return redirect('http://don-simon.kz/home');
@@ -244,7 +302,7 @@ class HomeController extends Controller
 
     }
     public function payfail(){
-        echo "Что-то пошло не так ошибка сервера";
+        return redirect('http://don-simon.kz/home');
     }
     public function promo(Request $request){
         $promo = $request->get('promo');
