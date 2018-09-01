@@ -282,7 +282,7 @@ class HomeController extends Controller
           $polya = Alltovars::where('idzakas',session('timeorder'))->first();
           $idzakas = $polya->idzakas;
           if (session('timeorder')==$idzakas) {
-             $order = Order::where('RETURN_CLIENTORDER',$idzakas)->first();
+             $order = Order::where('RETURN_CLIENTORDER',$idzakas)->get();
              if (count($order)>0) {
                $email = md5(session('email'));
                $request->session()->flush();
