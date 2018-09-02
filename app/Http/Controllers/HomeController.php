@@ -260,6 +260,7 @@ class HomeController extends Controller
                 "adres"=>$adres,
                 "sena"=>$sena,
                 "id"=>$id,
+                "order"=>$idzakas,
             ];
 
             Mail::send('mail',$data2,  function ($message) {
