@@ -194,12 +194,16 @@ class HomeController extends Controller
 
     }
     public function payok (Request $request){
+      sleep(2);
+      $a = json_encode($_POST);
+      file_put_contents('in_parsmetrs.txt', $a);
+
+
         $item = new Order([
             'RETURN_UNIQ_ID'=>$request->get('RETURN_UNIQ_ID'),
             'RETURN_MERCHANT'=>$request->get('RETURN_MERCHANT'),
             'RETURN_ADDVALUE'=> $request->get('RETURN_ADDVALUE'),
             'RETURN_CLIENTORDER'=> $request->get('RETURN_CLIENTORDER'),
-
             'RETURN_AMOUNT'=> $request->get('RETURN_AMOUNT'),
             'RETURN_RESULT'=> $request->get('RETURN_RESULT'),
             'RETURN_COMISSION'=>$request->get('RETURN_COMISSION'),
