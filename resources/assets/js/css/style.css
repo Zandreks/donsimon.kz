@@ -23,7 +23,9 @@ main {
   min-height: calc(76vh - 80px);
 
 }
-
+.marker{
+    background-color: yellow;
+}
 .navbar{
     color: white;
     padding-top: 20px;

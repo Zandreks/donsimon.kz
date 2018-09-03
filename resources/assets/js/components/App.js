@@ -8,6 +8,7 @@ import "@fancyapps/fancybox/dist/jquery.fancybox.css"
 import "@fancyapps/fancybox/dist/jquery.fancybox"
 import Footer from "./Footer";
 import Modal from "./Modal"
+import CKEditor from 'react-ckeditor-component';
 
 export default class App extends React.Component {
 
