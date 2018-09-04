@@ -98,7 +98,7 @@ class HomeController extends Controller
 
         $dopinva = $name." ".$lastname." ".$email." ".$phone;
         $timeorder = session('timeorder');
-
+        $promo = session('promo') ;
 
         $dataadres=iconv('UTF-8','windows-1251', $adres);
         $datadop=iconv('UTF-8','windows-1251', $dopinva);
@@ -135,7 +135,8 @@ class HomeController extends Controller
                 "sena"=> $amout,
                 'tovars'=> $tovars,
                 "idzakas"=>$timeorder,
-                'email'=>$email
+                'email'=>$email,
+                "promo"=>$promo
             ]);
             $item->save();
 
@@ -215,6 +216,7 @@ class HomeController extends Controller
         if ($request->get('RETURN_RESULT') ==20) {
           $polya = Alltovars::where('idzakas',$request->get('RETURN_CLIENTORDER'))->first();
           $idzakas = $polya->idzakas;
+          $promokod = $polya->promo;
           if ($idzakas == $request->get('RETURN_CLIENTORDER')) {
             $name = $polya->name;
             $adres = $polya->adres;
@@ -230,8 +232,20 @@ class HomeController extends Controller
             $item->save();
             $id = $item->id;
 
+            if($promokod ==null){
+                $email = md5($polya->email);
+                $item = new Promo([
+                    "promo"=>$email,
+                    "timer"=>time() ,
+    
+                ]);
+                $item->save();
+    
+            }else{
+                $items = Promo::where('promo', $promokod)->delete();
 
-            $email = md5($polya->email);
+                $email = "Ваш промокод успешно использован!";
+            }
 
             $data =[
                 "tomars"=>$tovars,
@@ -262,20 +276,13 @@ class HomeController extends Controller
                 $message->to('zakaz@megabar.kz', 'Новый заказ с сайта don-simon.kz')->subject('Новый заказ с сайта don-simon.kz');
                 $message->from('zakaz@megabar.kz','Новый заказ с сайта don-simon.kz');
             });
-            $item = new Promo([
-                "promo"=>$email,
-                "timer"=>time() ,
-
-            ]);
-            $item->save();
-
+           
           }else {
           echo "OK";
           }
 
         }
-        $a = json_encode($_POST);
-        file_put_contents('in_parsmetrs.txt', $a);
+
   
         echo "OK";
     }
@@ -313,7 +320,7 @@ class HomeController extends Controller
         $items2 = Promo::where('promo', $promo)->first();
 
         if (count($items)>0){
-            $id = $items2->id;
+            $id = $items2->promo;
             session(['promo' => $id]);
 
             return response()->json('ok');

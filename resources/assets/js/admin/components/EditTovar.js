@@ -648,37 +648,37 @@ export default class EditTovar extends React.Component {
 
 								<div className="form-row">
 									<div className="col-md-3 mb-3">
-										<label htmlFor="sena">Цена за еденицу</label>
+										<label htmlFor="sena">Цена за единицу</label>
 										<input
 											type="text"
 											className={`form-control ${this.state.invsena}`}
 											onChange={this.oncgangesena}
 											id="sena"
-											placeholder="Цена за еденицу"
+											placeholder="Цена за единицу"
 											value={this.state.inpsena}
 										/>
 										<div className={this.state.classena}>{this.state.erorsena}</div>
 									</div>
 									<div className="col-md-3 mb-3">
-										<label htmlFor="sena2">Цена за еденицу в упаковке</label>
+										<label htmlFor="sena2">Цена за единицу в упаковке</label>
 										<input
 											type="text"
 											className={`form-control ${this.state.invsena2}`}
 											onChange={this.oncgangesena2}
 											id="sena2"
-											placeholder="Цена за еденицу в упакоовке"
+											placeholder="Цена за единицу в упакоовке"
 											value={this.state.inpsena2}
 										/>
 										<div className={this.state.classena2}>{this.state.erorsena2}</div>
 									</div>
 									<div className="col-md-3 mb-3">
-										<label htmlFor="kol">Количество едениц в упаковке </label>
+										<label htmlFor="kol">Количество единиц в упаковке </label>
 										<div className="input-group">
 											<input
 												type="text"
 												className={`form-control ${this.state.invkol}`}
 												id="kol"
-												placeholder="Количество едениц в упаковке"
+												placeholder="Количество единиц в упаковке"
 												onChange={this.oncgangekol}
 												value={this.state.inpkol}
 											/>
