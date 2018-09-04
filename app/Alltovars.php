@@ -13,7 +13,8 @@ class Alltovars extends Model
       'adres',
       'email',
       'sena',
-      'idzakas'
+      'idzakas',
+      "promo"
   ];
 
 }
