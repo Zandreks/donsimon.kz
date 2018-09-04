@@ -197,7 +197,6 @@ class HomeController extends Controller
          $item = new Order([
             'RETURN_UNIQ_ID'=>$request->get('RETURN_UNIQ_ID'),
             'RETURN_MERCHANT'=>$request->get('RETURN_MERCHANT'),
-            'RETURN_ADDVALUE'=> $request->get('RETURN_ADDVALUE'),
             'RETURN_CLIENTORDER'=> $request->get('RETURN_CLIENTORDER'),
             'RETURN_AMOUNT'=> $request->get('RETURN_AMOUNT'),
             'RETURN_RESULT'=> $request->get('RETURN_RESULT'),
