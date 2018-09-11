@@ -241,7 +241,7 @@ class HomeController extends Controller
                 
                 $item = new Promo([
                     "promo"=>$randomnum,
-                    "timer"=>time() ,
+                    "timer"=>$idzakas,
     
                 ]);
                 $item->save();
@@ -298,7 +298,14 @@ class HomeController extends Controller
           if (session('timeorder')==$idzakas) {
              $order = Order::where('RETURN_CLIENTORDER',$idzakas)->get();
              if (count($order)>0) {
-               $email = md5(session('email'));
+                $promoview = Promo::where('timer', $idzakas)->get();
+                $prom =Promo::where('timer', $idzakas)->first();
+                if(count($promoview) >0){
+                    $email = $prom->promo;
+                }else{
+                    $email ="Ваш промокод успешно использован!";
+                }
+               
                $request->session()->flush();
                return view('end', ['promo' => $email]);
              }else {
