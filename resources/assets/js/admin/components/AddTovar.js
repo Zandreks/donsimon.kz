@@ -676,7 +676,7 @@ export default class AddTovar extends React.Component {
 
 										<div className="" />
 									</div>
-									<div className="col-md-3 mb-3">
+									<div className="col-md-2 mb-3">
 										<label htmlFor="cat">Выберите категорию </label>
 										<div className="input-group">
 											<select className="form-control" onChange={this.oncgangecat} id="cat">
@@ -690,7 +690,7 @@ export default class AddTovar extends React.Component {
 										</div>
 										
 									</div>
-									<div className="col-md-4 mb-3">
+									<div className="col-md-5 mb-3">
 										<label htmlFor="pozis">Позиция для сока напишите целое число от 1 числа  </label>
 										<input
 											type="text"
