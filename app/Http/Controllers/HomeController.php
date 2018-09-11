@@ -220,6 +220,7 @@ class HomeController extends Controller
             $name = $polya->name;
             $adres = $polya->adres;
             $sena = $polya->sena;
+            $email = $polya->email;
             $tovars = $polya->tovars;
             $item = new Zakaz([
                 "name"=>$name,
@@ -232,6 +233,7 @@ class HomeController extends Controller
             $id = $item->id;
 
             if($promokod ==null){
+
                 do  {
                     $randomnum = mt_rand(1000, 9999);
                     $items = Promo::where('promo', $randomnum)->get();
@@ -247,12 +249,12 @@ class HomeController extends Controller
             }else{
                 $items = Promo::where('promo', $promokod)->delete();
 
-                $email = "Ваш промокод успешно использован!";
+                $randomnum = "Ваш промокод успешно использован!";
             }
 
             $data =[
                 "tomars"=>$tovars,
-                "promo"=>$email,
+                "promo"=>$randomnum,
                 "id"=>$id,
             ];
             $email2 = $polya->email;
