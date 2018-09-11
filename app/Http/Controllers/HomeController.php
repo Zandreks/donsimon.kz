@@ -232,9 +232,13 @@ class HomeController extends Controller
             $id = $item->id;
 
             if($promokod ==null){
-                $email = md5($polya->email);
+                do  {
+                    $randomnum = mt_rand(1000, 9999);
+                    $items = Promo::where('promo', $randomnum)->get();
+                        }while(count($items) != 0);
+                
                 $item = new Promo([
-                    "promo"=>$email,
+                    "promo"=>$randomnum,
                     "timer"=>time() ,
     
                 ]);
