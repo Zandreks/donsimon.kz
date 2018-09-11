@@ -74,6 +74,7 @@ export default class AddTovar extends React.Component {
 			sklad: 1,
 			category: [],
 			cat: '',
+			pozis:1,
 			image: []
 		};
 		this.oncgangetitle = this.oncgangetitle.bind(this);
@@ -92,6 +93,7 @@ export default class AddTovar extends React.Component {
 		this.submitform = this.submitform.bind(this);
 		this.list = this.list.bind(this);
 		this.onchagefile = this.onchagefile.bind(this);
+		this.onchagepozis = this.onchagepozis.bind(this); 
 	}
 
 	componentWillMount() {
@@ -243,7 +245,7 @@ export default class AddTovar extends React.Component {
 	}
 
 	oncgangetext(evt) {
-        var newContent = evt.editor.getData();
+		var newContent = evt.editor.getData();
 		if (title.length < 5) {
 			this.setState({
 				inptext: newContent,
@@ -258,7 +260,7 @@ export default class AddTovar extends React.Component {
 				clastext: 'valid-feedback',
 				erortext: 'Поле введено коректно'
 			});
-        }
+		}
 	}
 
 	oncgangesena(e) {
@@ -442,6 +444,7 @@ export default class AddTovar extends React.Component {
 			kol: Number(this.state.inpkol),
 			sklad: Number(this.state.sklad),
 			cat: this.state.cat,
+			pozit:this.state.pozis,
 			file: this.state.image
 		};
 		axios
@@ -484,7 +487,13 @@ export default class AddTovar extends React.Component {
 			reader.readAsDataURL(file[i]);
 		}
 	}
-
+	onchagepozis(e){
+		let pozis = e.target.value;
+		let int = pozis.replace(/\D+/g, '');
+		this.setState({
+			pozis:int
+		})
+	}
 	render() {
 		return (
 			<section className="mt-5">
@@ -679,6 +688,19 @@ export default class AddTovar extends React.Component {
 											</select>
 											<div className="" />
 										</div>
+										
+									</div>
+									<div className="col-md-4 mb-3">
+										<label htmlFor="pozis">Позиция для сока напишите целое число от 1 числа  </label>
+										<input
+											type="text"
+											className="form-control-file"
+											onChange={this.onchagepozis}
+											value={this.state.pozis}
+											id='pozis'
+										/>
+
+										<div className="" />
 									</div>
 								</div>
 								<button className="btn btn-primary mr-1" type="submit">

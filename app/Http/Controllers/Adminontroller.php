@@ -62,6 +62,7 @@ class Adminontroller extends Controller
             'sena2'=> $request->get('sena2'),
             'kolichestvo' => $request->get('kol'),
             'sklad' => $request ->get('sklad'),
+            'pozit'=>$request->get('pozit'),
             'id_category' => $request->get('cat'),
             "img"=>$img,
 
@@ -106,6 +107,7 @@ class Adminontroller extends Controller
         $item->kolichestvo=$request->get('kol');
         $item->sklad=$request->get('sklad');
         $item->id_category=$request->get('cat');
+        $item->pozit=$request->get('pozit');
         $item->img=$img;
         $item->save();
         return response()->json('Товар изменен');

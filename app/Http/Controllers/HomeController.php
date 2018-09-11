@@ -55,7 +55,7 @@ class HomeController extends Controller
 
     public function showcategoryid(Request $request){
         $id = $request->get("id");
-        $items = Tovars::where('id_category',$id)->orderBy('id', 'desc')->get();
+        $items = Tovars::where('id_category',$id)->orderBy('pozit', 'asc')->get();
 
         return response()->json($items);
 

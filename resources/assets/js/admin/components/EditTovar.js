@@ -74,6 +74,7 @@ export default class EditTovar extends React.Component {
 			sklad: 1,
 			category: [],
 			cat: 0,
+			pozis:1,
 			image: []
 		};
 		this.oncgangetitle = this.oncgangetitle.bind(this);
@@ -93,6 +94,8 @@ export default class EditTovar extends React.Component {
 		this.list = this.list.bind(this);
 		this.onchagefile = this.onchagefile.bind(this);
 		this.delet = this.delet.bind(this);
+		this.onchagepozis = this.onchagepozis.bind(this); 
+
 	}
 
 	delet(id) {
@@ -143,7 +146,8 @@ export default class EditTovar extends React.Component {
 					inptext: response.data.opisan,
 					inpsena: response.data.sena,
 					inpsena2: response.data.sena2,
-					inpkol: response.data.kolichestvo
+					inpkol: response.data.kolichestvo,
+					pozis: response.data.pozit
 				});
 			})
 			.catch((error) => {
@@ -528,7 +532,13 @@ export default class EditTovar extends React.Component {
 			reader.readAsDataURL(file[i]);
 		}
 	}
-
+	onchagepozis(e){
+		let pozis = e.target.value;
+		let int = pozis.replace(/\D+/g, '');
+		this.setState({
+			pozis:int
+		})
+	}
 	render() {
 		return (
 			<section className="mt-5">
@@ -724,6 +734,18 @@ export default class EditTovar extends React.Component {
 											</select>
 											<div className="" />
 										</div>
+									</div>
+									<div className="col-md-4 mb-3">
+										<label htmlFor="pozis">Позиция для сока напишите целое число от 1 числа  </label>
+										<input
+											type="text"
+											className="form-control-file"
+											onChange={this.onchagepozis}
+											value={this.state.pozis}
+											id='pozis'
+										/>
+
+										<div className="" />
 									</div>
 								</div>
 								<button className="btn btn-primary mr-2" type="submit">
