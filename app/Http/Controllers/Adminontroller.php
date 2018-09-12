@@ -85,7 +85,7 @@ class Adminontroller extends Controller
 
         ]);
         $item->save();
-        return response()->json('Товар добвлен');
+        return response()->json('Товар добавлен');
     }
 
     public function Edittovars(Request $request){
@@ -159,7 +159,7 @@ class Adminontroller extends Controller
 
         ]);
         $item->save();
-        return response()->json('Добвлено');
+        return response()->json('Добавлено');
     }
     public function Showcatpozit (Request $request){
         $id = $request->get("id");
