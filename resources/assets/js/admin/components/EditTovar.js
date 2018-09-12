@@ -74,7 +74,8 @@ export default class EditTovar extends React.Component {
 			sklad: 1,
 			category: [],
 			cat: 0,
-			pozis:1,
+			pozis: 0,
+			pozit:0,
 			image: []
 		};
 		this.oncgangetitle = this.oncgangetitle.bind(this);
@@ -94,7 +95,7 @@ export default class EditTovar extends React.Component {
 		this.list = this.list.bind(this);
 		this.onchagefile = this.onchagefile.bind(this);
 		this.delet = this.delet.bind(this);
-		this.onchagepozis = this.onchagepozis.bind(this); 
+		this.onchagepozis = this.onchagepozis.bind(this);
 
 	}
 
@@ -147,7 +148,9 @@ export default class EditTovar extends React.Component {
 					inpsena: response.data.sena,
 					inpsena2: response.data.sena2,
 					inpkol: response.data.kolichestvo,
-					pozis: response.data.pozit
+					pozis: response.data.pozit,
+					pozit: response.data.pozit
+
 				});
 			})
 			.catch((error) => {
@@ -378,11 +381,25 @@ export default class EditTovar extends React.Component {
 
 	oncgangecat(e) {
 		let sklad = e.target.value;
-		if (sklad === 'nan') {
-			sklad = this.state.cat;
+		if (sklad === 'nun') {
+			alert("Выберите категорию")
+			return false;
 		}
+		axios.post('/admin/showcatpozit2',{
+			id:sklad
+		})
+		.then((response) => {
+			this.setState({
+				pozis: response.data,
+			});
+		})
+		.catch((error) => {
+			console.log(error);
+		})
+		.then(function() {});
+		
 		this.setState({
-			cat: Number(sklad)
+			cat: sklad
 		});
 	}
 	submitform(e) {
@@ -475,6 +492,14 @@ export default class EditTovar extends React.Component {
 			});
 			return false;
 		}
+		if (this.state.cat === "nun") {
+			alert("Выберите категорию")
+			return false;
+		}
+		if (this.state.pozis <=0) {
+			alert("Позиция выбрана не корректно")
+			return false;
+		}
 		const tovar = {
 			id: this.props.match.params.id,
 			title: this.state.inptitle,
@@ -491,6 +516,7 @@ export default class EditTovar extends React.Component {
 			sklad: Number(this.state.sklad),
 			cat: Number(this.state.cat),
 			pozit:this.state.pozis,
+			pozit2:this.state.pozit,
 			file: this.state.image
 		};
 		axios
@@ -533,12 +559,13 @@ export default class EditTovar extends React.Component {
 			reader.readAsDataURL(file[i]);
 		}
 	}
-	onchagepozis(e){
+	onchagepozis(e) {
 		let pozis = e.target.value;
 		let int = pozis.replace(/\D+/g, '');
+
 		this.setState({
-			pozis:int
-		})
+			pozis: int
+		});
 	}
 	render() {
 		return (
@@ -737,13 +764,13 @@ export default class EditTovar extends React.Component {
 										</div>
 									</div>
 									<div className="col-md-5 mb-3">
-										<label htmlFor="pozis">Позиция для сока напишите целое число от 1 числа  </label>
+										<label htmlFor="pozis">Позиция для сока  </label>
 										<input
 											type="text"
 											className="form-control-file"
 											onChange={this.onchagepozis}
+											id="pozis"
 											value={this.state.pozis}
-											id='pozis'
 										/>
 
 										<div className="" />

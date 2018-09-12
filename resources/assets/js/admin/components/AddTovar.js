@@ -73,8 +73,9 @@ export default class AddTovar extends React.Component {
 			erorkol: '',
 			sklad: 1,
 			category: [],
-			cat: '',
-			pozis:1,
+			cat: 'nun',
+			pozis: 0,
+			pozit:0,
 			image: []
 		};
 		this.oncgangetitle = this.oncgangetitle.bind(this);
@@ -93,7 +94,7 @@ export default class AddTovar extends React.Component {
 		this.submitform = this.submitform.bind(this);
 		this.list = this.list.bind(this);
 		this.onchagefile = this.onchagefile.bind(this);
-		this.onchagepozis = this.onchagepozis.bind(this); 
+		this.onchagepozis = this.onchagepozis.bind(this);
 	}
 
 	componentWillMount() {
@@ -102,13 +103,14 @@ export default class AddTovar extends React.Component {
 			.then((response) => {
 				this.setState({
 					category: response.data,
-					cat: response.data[0].id
+					
 				});
 			})
 			.catch((error) => {
 				console.log(error);
 			})
 			.then(function() {});
+
 	}
 
 	oncgangetitle(e) {
@@ -330,10 +332,23 @@ export default class AddTovar extends React.Component {
 	}
 	oncgangecat(e) {
 		let sklad = e.target.value;
-		if (sklad === 'nan') {
-			sklad = this.state.cat;
+		if (sklad === 'nun') {
+			alert("Выберите категорию")
 			return false;
 		}
+		axios.post('/admin/showcatpozit',{
+			id:sklad
+		})
+		.then((response) => {
+			this.setState({
+				pozis: response.data,
+			});
+		})
+		.catch((error) => {
+			console.log(error);
+		})
+		.then(function() {});
+		
 		this.setState({
 			cat: sklad
 		});
@@ -430,6 +445,15 @@ export default class AddTovar extends React.Component {
 			});
 			return false;
 		}
+		
+		if (this.state.cat === "nun") {
+			alert("Выберите категорию")
+			return false;
+		}
+		if (this.state.pozis <=0) {
+			alert("Позиция выбрана не корректно")
+			return false;
+		}
 		const tovar = {
 			title: this.state.inptitle,
 			art: this.state.inpart,
@@ -444,7 +468,7 @@ export default class AddTovar extends React.Component {
 			kol: Number(this.state.inpkol),
 			sklad: Number(this.state.sklad),
 			cat: this.state.cat,
-			pozit:this.state.pozis,
+			pozit: this.state.pozis,
 			file: this.state.image
 		};
 		axios
@@ -487,12 +511,13 @@ export default class AddTovar extends React.Component {
 			reader.readAsDataURL(file[i]);
 		}
 	}
-	onchagepozis(e){
+	onchagepozis(e) {
 		let pozis = e.target.value;
 		let int = pozis.replace(/\D+/g, '');
+
 		this.setState({
-			pozis:int
-		})
+			pozis: int
+		});
 	}
 	render() {
 		return (
@@ -676,30 +701,28 @@ export default class AddTovar extends React.Component {
 
 										<div className="" />
 									</div>
-									<div className="col-md-2 mb-3">
+									<div className="col-md-4 mb-3">
 										<label htmlFor="cat">Выберите категорию </label>
 										<div className="input-group">
 											<select className="form-control" onChange={this.oncgangecat} id="cat">
-												<option value="nan" selected>
-													Выберите категорию{' '}
+												<option value="nun" selected>
+													Выберите категорию
 												</option>
 
 												{this.list()}
 											</select>
 											<div className="" />
 										</div>
-										
 									</div>
-									<div className="col-md-5 mb-3">
-										<label htmlFor="pozis">Позиция для сока напишите целое число от 1 числа  </label>
+									<div className="col-md-4 mb-3">
+										<label htmlFor="pozis">Позиция для сока  </label>
 										<input
 											type="text"
 											className="form-control-file"
 											onChange={this.onchagepozis}
+											id="pozis"
 											value={this.state.pozis}
-											id='pozis'
 										/>
-
 										<div className="" />
 									</div>
 								</div>

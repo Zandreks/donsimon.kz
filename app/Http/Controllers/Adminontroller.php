@@ -15,7 +15,7 @@ class Adminontroller extends Controller
         return view('admin');
     }
     public function showtovar(){
-        $items= Tovars::all();
+        $items= Tovars::orderBy('pozit', 'asc')->get();
         return response()->json($items);
 
     }
@@ -49,6 +49,22 @@ class Adminontroller extends Controller
 
             $img = implode(" ", $nameimage);
         }
+
+        $pozis = $request->get('pozit');
+        $tovarpozis = Tovars::where('pozit', $pozis)->where('id_category',$request->get('cat'))->get();
+        if(count($tovarpozis) > 0){
+           $tovartt = Tovars::where('pozit', $pozis)->where('id_category',$request->get('cat'))->first();
+           $id = $tovartt->id;
+           $poz= $tovartt->pozit;
+           $itemscater = Category::find($request->get('cat'));
+           $full = Tovars::where('id_category',$itemscater->id)->get();
+           $fullcount = count($full)+1;
+           $itemtov= Tovars::find($id);
+           $itemtov->pozit=$fullcount;
+           $itemtov->save();
+           $pozis = $poz;
+        }
+
         $item = new Tovars([
             "title"=>$title,
             "articl"=> $request->get("art"),
@@ -62,7 +78,7 @@ class Adminontroller extends Controller
             'sena2'=> $request->get('sena2'),
             'kolichestvo' => $request->get('kol'),
             'sklad' => $request ->get('sklad'),
-            'pozit'=>$request->get('pozit'),
+            'pozit'=>$pozis,
             'id_category' => $request->get('cat'),
             "img"=>$img,
 
@@ -92,7 +108,17 @@ class Adminontroller extends Controller
 
             $img = implode(" ", $nameimage);
         }
-
+        $pozis = $request->get('pozit');
+        $tovarpozis = Tovars::where('pozit', $pozis)->where('id_category',$request->get('cat'))->get();
+        if(count($tovarpozis) > 0){
+           $tovartt = Tovars::where('pozit', $pozis)->where('id_category',$request->get('cat'))->first();
+           $id = $tovartt->id;
+           $poz= $tovartt->pozit;
+           $itemtov= Tovars::find($id);
+           $itemtov->pozit=$request->get('pozit2');
+           $itemtov->save();
+           $pozis = $poz;
+        }
         $item= Tovars::find($request->get('id'));
         $item->title=$title;
         $item->articl=$request->get("art");
@@ -107,7 +133,7 @@ class Adminontroller extends Controller
         $item->kolichestvo=$request->get('kol');
         $item->sklad=$request->get('sklad');
         $item->id_category=$request->get('cat');
-        $item->pozit=$request->get('pozit');
+        $item->pozit=$pozis;
         $item->img=$img;
         $item->save();
         return response()->json('Товар изменен');
@@ -134,6 +160,18 @@ class Adminontroller extends Controller
         ]);
         $item->save();
         return response()->json('Добвлено');
+    }
+    public function Showcatpozit (Request $request){
+        $id = $request->get("id");
+        $items = Category::find($id);
+        $tovars = Tovars::where('id_category',$items->id)->get();
+        return response()->json(count($tovars)+1);
+    }
+    public function Showcatpozit2 (Request $request){
+        $id = $request->get("id");
+        $items = Category::find($id);
+        $tovars = Tovars::where('id_category',$items->id)->get();
+        return response()->json(count($tovars));
     }
     public function Editcat(Request $request){
         $id = $request->get("id");

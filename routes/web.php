@@ -47,6 +47,9 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()
     Route::post("/category","Adminontroller@category");
     Route::post("/delcategory","Adminontroller@delcategory");
     Route::post("/addtovar","Adminontroller@addtovar");
+    Route::post("/showcatpozit","Adminontroller@Showcatpozit");
+    Route::post("/showcatpozit2","Adminontroller@Showcatpozit2");
+
     Route::post("/edittovar","Adminontroller@Edittovars");
     Route::post("/edit","Adminontroller@Edit");
     Route::post("/addcat","Adminontroller@addcat");
